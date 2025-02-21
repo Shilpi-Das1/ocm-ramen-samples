@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: busybox-1
+  name: busybox-3
 spec:
   replicas: 1
   selector:
@@ -37,4 +37,4 @@ spec:
       volumes:
         - name: varlog
           persistentVolumeClaim:
-            claimName: busybox-pvc-1
+            claimName: busybox-pvc-3
