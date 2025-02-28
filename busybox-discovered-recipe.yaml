@@ -40,11 +40,11 @@ spec:
     namespace: busybox-discovered-rbd-hook-multi
     selectResource: deployment
     nameSelector: busybox
-    timeout: 800
+    timeout: 200
     onError: fail
     chks:
     - name: stateReady
-      timeout: 900
+      timeout: 250
       onError: fail
       condition: "{$.spec.replicas} == {$.status.readyReplicas}"
   volumes:
