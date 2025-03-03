@@ -1,11 +1,11 @@
 apiVersion: ramendr.openshift.io/v1alpha1
 kind: Recipe
 metadata:
-  name: busybox-discovered-rbd-hook-multi
+  name: busybox-discovered-rbd-hook-multiple
 spec:
   appType: busybox
   groups:
-  - backupRef: busybox-discovered-rbd-hook-multi
+  - backupRef: busybox-discovered-rbd-hook-multiple
     excludedResourceTypes:
     - events
     - event.events.k8s.io
@@ -14,32 +14,32 @@ spec:
     - persistentvolumeclaims
     - pods
     includedNamespaces:
-    - busybox-discovered-rbd-hook-multi
+    - busybox-discovered-rbd-hook-multiple
     labelSelector:
       matchExpressions:
       - key: appname
         operator: In
         values:
         - busybox
-    name: busybox-discovered-rbd-hook-multi
+    name: busybox-discovered-rbd-hook-multiple
     type: resource
   workflows:
   - failOn: any-error
     name: backup
     sequence:
+    - group: busybox-discovered-rbd-hook-multiple
     - hook: deployment-check/stateReady
-    - group: busybox-discovered-rbd-hook-multi
   - failOn: any-error
     name: restore
     sequence:
-    - group: busybox-discovered-rbd-hook-multi
+    - group: busybox-discovered-rbd-hook-multiple
     - hook: deployment-check/stateReady
   hooks:
   - name: deployment-check
     type: check
-    namespace: busybox-discovered-rbd-hook-multi
+    namespace: busybox-discovered-rbd-hook-multiple
     selectResource: deployment
-    nameSelector: busybox
+    nameSelector: busybox-.*
     timeout: 200
     onError: fail
     chks:
@@ -49,7 +49,7 @@ spec:
       condition: "{$.spec.replicas} == {$.status.readyReplicas}"
   volumes:
     includedNamespaces:
-    - busybox-discovered-rbd-hook-multi
+    - busybox-discovered-rbd-hook-multiple
     name: varlog
     type: volume
     labelSelector:
